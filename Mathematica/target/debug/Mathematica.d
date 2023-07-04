@@ -1,1 +1,1 @@
-/Users/bmcc/Documents/Programs/Rust/Mathematica/Mathematica/target/debug/Mathematica: /Users/bmcc/Documents/Programs/Rust/Mathematica/Mathematica/src/app/mod.rs /Users/bmcc/Documents/Programs/Rust/Mathematica/Mathematica/src/main.rs
+/home/bmcc/Projects/Mathematica/Mathematica/target/debug/Mathematica: /home/bmcc/Projects/Mathematica/Mathematica/src/app/main_page/mod.rs /home/bmcc/Projects/Mathematica/Mathematica/src/app/mod.rs /home/bmcc/Projects/Mathematica/Mathematica/src/main.rs
