@@ -8,3 +8,6 @@ edition = "2021"
 [dependencies]
 tui = "0.19"
 crossterm = "0.25"
+plotters = "0.3"
+meval = "0.2"
+
