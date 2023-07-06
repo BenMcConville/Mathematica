@@ -79,16 +79,17 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         .margin(5)
         .split(f.size());
 
-    let selected_style = Style::default().add_modifier(Modifier::REVERSED);
+    //let selected_style = Style::default().add_modifier(Modifier::REVERSED);
+    let selected_style = Style::default().fg(Color::Rgb(255,213,0));
     let normal_style = Style::default().bg(Color::Blue);
-    let header_cells = ["Header1", "Header2"]
+    /*let header_cells = ["Header1", "Header2"] --Header
         .iter()
         .map(|h| Cell::from(*h).style(Style::default().fg(Color::Red)));
     let header = Row::new(header_cells)
         .style(normal_style)
-        .height(1)
+        .height(1) 
         .bottom_margin(1);
-    let rows = app.items.iter().map(|item| {
+    */let rows = app.items.iter().map(|item| {
         let height = item
             .iter()
             .map(|content| content.chars().filter(|c| *c == '\n').count())
@@ -99,10 +100,10 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &mut App) {
         Row::new(cells).height(height as u16).bottom_margin(1)
     });
     let t = Table::new(rows)
-        .header(header)
-        .block(Block::default().borders(Borders::ALL).title("Table"))
+        //.header(header) -- Header
+        .block(Block::default().borders(Borders::ALL).title("Mathematica"))
         .highlight_style(selected_style)
-        .highlight_symbol(">> ")
+        .highlight_symbol(" > ")
         .widths(&[
             Constraint::Percentage(50),
             Constraint::Length(30),
