@@ -9,7 +9,7 @@ pub fn run()    {
     }
     match main_page::run()  {
         Ok(99) => println!("Error"),
-        Ok(1) => match graphs::graph_setup()    {
+        Ok(0) => match graphs::graph_setup()    {
             Ok(1) => println!("Ok"),
             _ => println!("NOK"),
         },

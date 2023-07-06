@@ -49,7 +49,7 @@ pub fn graph_setup() -> Result<usize, Box<dyn Error>> {
     
     match res   {
         //Ok(num) => Ok(num),
-        Ok(1) => twod_graph::graph("sin(x)"),
+        Ok(0) => twod_graph::graph("sin(x)"),
         _ => return Ok(99),
     };
     Ok(1)
@@ -138,7 +138,7 @@ impl<'a> App<'a> {
         App {
             state: TableState::default(),
             items: vec![ //Current mods (Auto fill later)
-                vec!["2D Graph", "Enter any 2D function"],
+                vec!["2D Graph", "(Click Here)Enter any 2D function"],
                 vec!["Vector Calc", "Graphs"],
                 vec!["Integral Calc", "Calculations"],
             ],
