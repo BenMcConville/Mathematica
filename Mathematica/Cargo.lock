@@ -10,6 +10,7 @@ dependencies = [
  "meval",
  "plotters",
  "tui",
+ "unicode-width",
 ]
 
 [[package]]

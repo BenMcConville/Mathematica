@@ -1,12 +1,40 @@
 use plotters::prelude::*;
+use std::io;
+use super::graph_gui;
 
-pub fn graph(equation: &str) {
-        
-    match create_graph(equation) {
+enum InputMode  {
+    Normal,
+    Editing
+}
+/*
+struct App  {
+    input: String,
+    input_mode: InputMode,
+}
+
+impl Default for App {
+    fn default() -> App {
+        App {
+            input: String::new(),
+            input_mode: InputMode::Normal,
+        }
+    }
+}*/
+
+pub fn graph() {
+    println!("Enter Equation: \n");
+    let mut equation = String::new();
+    let mut app = graph_gui::App::default(); //Possibly Add correct equation detector
+    graph_gui::user_input(&mut app);
+    println!("{:?}", app);
+    //io::stdin().read_line(&mut equation)
+    //    .expect("Failed to Read Equation");
+    
+    match create_graph(&app.input) {
         None => {
             std::process::Command::new("feh")
                 .arg("-F")
-                .arg("images/0.1.png")
+                .arg("images/graph.png")
                 .spawn()
                 .expect("ls command failed to start");
                 println!("Image Rendered")
@@ -39,4 +67,6 @@ fn create_graph(equation: &str) -> Option<()> {
     chart.configure_mesh().draw().unwrap();
     None
 }
+
+
 

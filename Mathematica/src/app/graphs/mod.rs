@@ -1,5 +1,5 @@
 pub mod twod_graph;
-
+pub mod graph_gui;
 /*
 pub fn graph_setup()    {
     twod_graph::graph("sin(x)");
@@ -49,7 +49,7 @@ pub fn graph_setup() -> Result<usize, Box<dyn Error>> {
     
     match res   {
         //Ok(num) => Ok(num),
-        Ok(0) => twod_graph::graph("sin(x)"),
+        Ok(0) => twod_graph::graph(),
         _ => return Ok(99),
     };
     Ok(1)
