@@ -50,6 +50,7 @@ pub fn run() -> Result<usize, Box<dyn Error>> {
 
 fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> io::Result<usize> {
     let mut running = true;
+    app.next();
     while running {
         terminal.draw(|f| ui(f, &mut app))?;
 
@@ -130,8 +131,8 @@ impl<'a> App<'a> {
         App {
             state: TableState::default(),
             items: vec![ //Current mods (Auto fill later)
-                vec!["Grapher", "Graphs"],
-                vec!["Vector Calc", "Graphs"],
+                vec!["Graph", "Used to Graph Graphs to see Graphs"],
+                vec!["Fourier", "Used to Graph and Calc Fourier"],
                 vec!["Integral Calc", "Calculations"],
             ],
         }

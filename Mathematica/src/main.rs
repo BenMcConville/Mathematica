@@ -1,7 +1,10 @@
 pub mod app;
-
+use std::process::Command;
 
 fn main() {
-    println!("Hello, world!");
+    Command::new("ls")
+        .arg("-a")
+        .output()
+        .expect("Failed to execute command");
     app::run();
 }

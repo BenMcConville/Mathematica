@@ -58,8 +58,13 @@ fn create_graph(equation: &str) -> Option<()> {
         .unwrap();
 
     let expr: meval::Expr = equation.parse().unwrap();
-    let func = expr.bind("x").unwrap();
-
+    println!("E1");
+    let func = expr.bind("x");//.unwrap();
+    match func  {
+        Ok(_) => (),
+        _ => return Some(()),
+    }
+    let func = func.unwrap();
     chart.draw_series(LineSeries::new(
         (-628..628).map(|x| x as f64 / 100.0).map(|x| (x, func(x))),
         &RED

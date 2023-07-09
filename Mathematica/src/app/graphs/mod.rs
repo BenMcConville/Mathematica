@@ -58,6 +58,7 @@ pub fn graph_setup() -> Result<usize, Box<dyn Error>> {
 
 fn run_app<B: Backend>(terminal: &mut Terminal<B>, mut app: App) -> io::Result<usize> {
     let mut running = true;
+    app.next();
     while running {
         terminal.draw(|f| ui(f, &mut app))?;
 
@@ -139,8 +140,8 @@ impl<'a> App<'a> {
             state: TableState::default(),
             items: vec![ //Current mods (Auto fill later)
                 vec!["2D Graph", "(Click Here)Enter any 2D function"],
-                vec!["Vector Calc", "Graphs"],
-                vec!["Integral Calc", "Calculations"],
+                vec!["2D Scalar", "Graph"],
+                vec!["3D Graph", "Graph"],
             ],
         }
     }
