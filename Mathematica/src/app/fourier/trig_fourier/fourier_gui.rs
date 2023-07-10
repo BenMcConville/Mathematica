@@ -20,7 +20,7 @@ use tui::{
     layout::{Constraint, Direction, Layout},
     style::{Color, Modifier, Style},
     text::{Span, Spans, Text},
-    widgets::{Block, Borders, List, ListItem, Paragraph},
+    widgets::{Block, Borders, BorderType, List, ListItem, Paragraph},
     Frame, Terminal,
 };
 use unicode_width::UnicodeWidthStr;
@@ -115,6 +115,7 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
 }
 
 fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
+    
     let chunks = Layout::default()
         .direction(Direction::Vertical)
         .margin(2)
@@ -122,7 +123,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
             [
                 Constraint::Length(1),
                 Constraint::Length(3),
-                Constraint::Min(1),
+                Constraint::Length(5),
             ]
             .as_ref(),
         )
@@ -177,5 +178,11 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
             )
         }
     }
+    let block = Block::default()
+        .borders(Borders::ALL)
+        .title("Another one")
+        .border_type(BorderType::Rounded);
+        //.title_alignment(Alignment::Right);
+    f.render_widget(block, chunks[2]);
 }
 
