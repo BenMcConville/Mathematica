@@ -1,3 +1,4 @@
+pub mod trig_fourier;
 
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
@@ -43,7 +44,7 @@ pub fn fourier_setup() -> Result<usize, Box<dyn Error>> {
     
     match res   {
         //Ok(num) => Ok(num),
-        Ok(0) => println!("Running Fourier"),//twod_graph::graph(),
+        Ok(0) => trig_fourier::fourier_setup(),
         _ => return Ok(99),
     };
     Ok(1)
@@ -133,9 +134,7 @@ impl<'a> App<'a> {
         App {
             state: TableState::default(),
             items: vec![ //Current mods (Auto fill later)
-                vec!["2D Graph", "(Click Here)Enter any 2D function"],
-                vec!["2D Scalar", "Graph"],
-                vec!["3D Graph", "Graph"],
+                vec!["Trig Fourier", "(Click Here)Enter any 2D function"],
             ],
         }
     }
