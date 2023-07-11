@@ -1,4 +1,5 @@
 pub mod fourier_gui;
+pub mod trigCalc;
 
 enum InputMode  {
     Normal,

@@ -1,14 +1,5 @@
-/// A simple example demonstrating how to handle user input. This is
-/// a bit out of the scope of the library as it does not provide any
-/// input handling out of the box. However, it may helps some to get
-/// started.
-///
-/// This is a very simple example:
-///   * A input box always focused. Every character you type is registered
-///   here
-///   * Pressing Backspace erases a character
-///   * Pressing Enter pushes the current input in the history of previous
-///   messages
+//use trigCalc;
+
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
     execute,
@@ -123,11 +114,21 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
             [
                 Constraint::Length(1),
                 Constraint::Length(3),
-                Constraint::Length(5),
+                Constraint::Length(7),
             ]
             .as_ref(),
         )
         .split(f.size());
+
+    let bottom_chunk = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([Constraint::Percentage(10), Constraint::Percentage(90)].as_ref())
+        .split(chunks[2]);
+
+    let graph = Layout::default()
+        .direction(Direction::Vertical)
+        .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
+        .split(bottom_chunk[1]);
 
     let (msg, style) = match app.input_mode {
         InputMode::Normal => (
@@ -159,7 +160,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
     let input = Paragraph::new(app.input.as_ref())
         .style(match app.input_mode {
             InputMode::Normal => Style::default(),
-            InputMode::Editing => Style::default().fg(Color::Yellow),
+            InputMode::Editing => Style::default().fg(Color::Rgb(255,213,0)),
         })
         .block(Block::default().borders(Borders::ALL).title("Input"));
     f.render_widget(input, chunks[1]);
@@ -184,5 +185,34 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
         .border_type(BorderType::Rounded);
         //.title_alignment(Alignment::Right);
     f.render_widget(block, chunks[2]);
+
+    let text = vec![//Display An + Bn
+        Spans::from(""),
+        Spans::from(" Another"),
+        Spans::from(" ben"),
+    ];
+
+    let paragraph = Paragraph::new(text.clone())
+        .style(Style::default().fg(Color::White));
+    f.render_widget(paragraph, bottom_chunk[0]);
+
+    let block = Block::default()
+        .borders(Borders::ALL)
+        .title("Here?") 
+        .border_type(BorderType::Rounded);
+    f.render_widget(block, bottom_chunk[0]);
+
+    let block = Block::default()
+        .borders(Borders::ALL)
+        .title("Here?") 
+        .border_type(BorderType::Rounded);
+    f.render_widget(block, graph[0]);
+
+    let block = Block::default()
+        .borders(Borders::ALL)
+        .title("Here?") 
+        .border_type(BorderType::Rounded);
+    f.render_widget(block, graph[1]);
+
 }
 
