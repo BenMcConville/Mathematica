@@ -1,4 +1,4 @@
-//use trigCalc;
+use super::trigCalc;
 
 use crossterm::{
     event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
@@ -11,7 +11,7 @@ use tui::{
     layout::{Constraint, Direction, Layout},
     style::{Color, Modifier, Style},
     text::{Span, Spans, Text},
-    widgets::{Block, Borders, BorderType, List, ListItem, Paragraph},
+    widgets::{Block, Borders, BarChart, BorderType, List, ListItem, Paragraph},
     Frame, Terminal,
 };
 use unicode_width::UnicodeWidthStr;
@@ -29,6 +29,7 @@ pub struct App {
     pub input: String,
     /// Current input mode
     input_mode: InputMode,
+    pub coef_vals: Vec<(f64, f64)>,
 }
 
 impl Default for App {
@@ -36,6 +37,7 @@ impl Default for App {
         App {
             input: String::new(),
             input_mode: InputMode::Normal,
+            coef_vals: vec![(1.0,2.0), (3.0, 4.0), (5.0, 6.0)],
         }
     }
 }
@@ -86,7 +88,11 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
                 },
                 InputMode::Editing => match key.code {
                     KeyCode::Enter => {//app.input is where to read equation
-                        run_loop = false;//app.input.clear();//println!("{}", app.input);//app.input.drain(..).collect::Vec<<_>>());
+                        //Need to check equation input:
+                        match parseEqn(app) {
+                            None => (),
+                            _ => println!("Error on Equation"),
+                        }
                     }
                     KeyCode::Char(c) => {
                         app.input.push(c);
@@ -103,6 +109,17 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
         }
     }
     Ok(())
+}
+fn parseEqn(app: &mut App) -> Option<()>   {
+    let expr: meval::Expr = app.input.parse().unwrap();
+    let func = expr.bind("x");
+    match func  {
+        Ok(_) => (),
+        _ => return Some(()),
+    }
+    let func = func.unwrap();
+    app.coef_vals = trigCalc::calc_coeff(0.0, 6.283185, &func);
+    None
 }
 
 fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
@@ -122,7 +139,7 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
 
     let bottom_chunk = Layout::default()
         .direction(Direction::Horizontal)
-        .constraints([Constraint::Percentage(10), Constraint::Percentage(90)].as_ref())
+        .constraints([Constraint::Percentage(30), Constraint::Percentage(70)].as_ref())
         .split(chunks[2]);
 
     let graph = Layout::default()
@@ -186,11 +203,17 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
         //.title_alignment(Alignment::Right);
     f.render_widget(block, chunks[2]);
 
-    let text = vec![//Display An + Bn
-        Spans::from(""),
-        Spans::from(" Another"),
-        Spans::from(" ben"),
+    let mut text = vec![//Display An + Bn
+        Spans::from("An | Bn"),
     ];
+
+    let mut data01: Vec<(&str, u64)> = vec![]; 
+    let mut data02: Vec<(&str, u64)> = vec![];
+    for (a,b) in &app.coef_vals  {
+        text.push(Spans::from(format!(" {:.4} | {:.4}", a, b)));
+        data01.push(("a", (a*a*100.0).floor() as u64));
+        data02.push(("b", (b*b*100.0).floor() as u64));
+    }
 
     let paragraph = Paragraph::new(text.clone())
         .style(Style::default().fg(Color::White));
@@ -198,21 +221,38 @@ fn ui<B: Backend>(f: &mut Frame<B>, app: &App) {
 
     let block = Block::default()
         .borders(Borders::ALL)
-        .title("Here?") 
+        .title("Here?01") 
         .border_type(BorderType::Rounded);
     f.render_widget(block, bottom_chunk[0]);
 
-    let block = Block::default()
-        .borders(Borders::ALL)
-        .title("Here?") 
-        .border_type(BorderType::Rounded);
-    f.render_widget(block, graph[0]);
+    
+    let barchart = BarChart::default()
+        .block(Block::default().title("Data3").borders(Borders::ALL))
+        .data(&data01)
+        .bar_style(Style::default().fg(Color::Green))
+        .bar_width(4)
+        .bar_gap(0)
+        .value_style(Style::default().bg(Color::Green))
+        .label_style(
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::ITALIC),
+    );
+    f.render_widget(barchart, graph[0]);
 
-    let block = Block::default()
-        .borders(Borders::ALL)
-        .title("Here?") 
-        .border_type(BorderType::Rounded);
-    f.render_widget(block, graph[1]);
+    let barchart = BarChart::default()
+        .block(Block::default().title("Data3").borders(Borders::ALL))
+        .data(&data02)
+        .bar_style(Style::default().fg(Color::Blue))
+        .bar_width(4)
+        .bar_gap(0)
+        .value_style(Style::default().bg(Color::Blue))
+        .label_style(
+            Style::default()
+                .fg(Color::Cyan)
+                .add_modifier(Modifier::ITALIC),
+    );
+    f.render_widget(barchart, graph[1]);
 
 }
 
